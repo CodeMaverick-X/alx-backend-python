@@ -7,7 +7,7 @@ Tv = TypeVar('T')
 
 
 def safely_get_value(dct: Mapping, key: Any,
-                     default: Union[Tv, None] = None) -> Union[Any, T]:
+                     default: Union[Tv, None] = None) -> Union[Any, Tv]:
     """
     return values safely
     """
