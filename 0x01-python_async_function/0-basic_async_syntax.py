@@ -6,10 +6,9 @@ and returns teh val and waits.
 
 import asyncio
 import random
-from typing import Union
 
 
-async def wait_random(max_delay: int = 10) -> Union[int, float]:
+async def wait_random(max_delay: int = 10) -> float:
     """wait with async function
     return the random num aftr waiting
     """
