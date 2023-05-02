@@ -14,7 +14,10 @@ from typing import Union
 
 
 async def wait_random(max_delay: int = 10) -> Union[int, float]:
-    """wiat with async"""
+    """wait with async function
+    return the random number after
+    waiting
+    """
     r = random.uniform(0, max_delay)
     await asyncio.sleep(r)
 
