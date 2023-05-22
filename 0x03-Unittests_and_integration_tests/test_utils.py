@@ -2,10 +2,11 @@
 """
 test utils module
 """
-
-from utils import access_nested_map
+from typing import Dict, Union, Tuple
+from utils import access_nested_map, get_json, requests
 import unittest
 from parameterized import parameterized
+from unittest import mock
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -32,3 +33,22 @@ class TestAccessNestedMap(unittest.TestCase):
             except KeyError as e:
                 self.assertIn(e.args[0], path)
                 raise
+
+
+class TestGetJson(unittest.TestCase):
+    """test get_json"""
+
+    @parameterized.expand([("http://example.com", {"payload": True}),
+                           ("http://holberton.io", {"payload": False})])
+    @mock.patch("utils.requests")
+    def test_get_json(self, test_url: str, test_payload: Dict[str, bool],
+                      mock_requests: mock.Mock):
+        """Test Get JSON"""
+
+        mock_response = mock.MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = test_payload
+        mock_requests.get.return_value = mock_response
+        self.assertEqual(get_json(
+            test_url), mock_response.json())
+        mock_requests.get.assert_called_with(test_url)
