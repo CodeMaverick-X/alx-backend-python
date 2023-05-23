@@ -4,9 +4,10 @@ test for github client class
 """
 import unittest
 from unittest import mock
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
 from typing import Dict
+from fixtures import (TEST_PAYLOAD)
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -70,3 +71,29 @@ class TestGithubOrgClient(unittest.TestCase):
                          expected: bool):
         """Test has license method"""
         self.assertEqual(GithubOrgClient.has_license(**input), expected)
+
+
+@parameterized_class(("org_payload", "repos_payload",
+                      "expected_repos", "apache2_repos"), TEST_PAYLOAD)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """Test integration GithubOrgClient"""
+    @classmethod
+    def setUpClass(cls) -> None:
+        """setup class method"""
+        cls.get_patcher = mock.patch("requests.get")
+        mock_get = cls.get_patcher.start()
+        mock_response = mock.MagicMock()
+        mock_response.json.side_effect = [
+            TEST_PAYLOAD[0][0], TEST_PAYLOAD[0][1]]
+        mock_get.return_value = mock_response
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """tear down class method"""
+        cls.get_patcher.stop()
+
+    def test_public_repos_with_license(self):
+        """test public repos with license"""
+        client = GithubOrgClient("google")
+        data = client.public_repos(license="apache-2.0")
+        self.assertEqual(data, self.apache2_repos)
