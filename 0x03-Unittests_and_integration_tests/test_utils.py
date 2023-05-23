@@ -58,14 +58,18 @@ class TestMemoize(unittest.TestCase):
     """test memoize"""
 
     def test_memoize(self):
+        """test memoize meth"""
 
         class TestClass:
+            """test class"""
 
             def a_method(self):
+                """a meth"""
                 return 42
 
             @memoize
             def a_property(self):
+                """another meth"""
                 return self.a_method()
 
         with mock.patch.object(TestClass, 'a_method',
