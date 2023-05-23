@@ -42,3 +42,19 @@ class TestGithubOrgClient(unittest.TestCase):
             client = GithubOrgClient('google')
             val = client._public_repos_url
             self.assertEqual(val, 'fake/url')
+
+    @mock.patch('client.get_json')
+    def test_public_repos(self, mock_get_json):
+        """test public repo"""
+
+        mock_get_json.return_value = [{'name': 'google'}]
+
+        with mock.patch("client.GithubOrgClient._public_repos_url",
+                        new_callable=mock.PropertyMock
+                        ) as mock_public_repos_url:
+            payload = {'name': 'google'}
+            mock_public_repos_url.return_value = payload
+            mockq = GithubOrgClient("google")
+            data = mockq.public_repos()
+            self.assertEqual(list(payload.values()), data)
+            mock_get_json.assert_called_once()
