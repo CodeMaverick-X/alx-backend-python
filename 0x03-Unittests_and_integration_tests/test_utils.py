@@ -3,7 +3,7 @@
 test utils module
 """
 from typing import Dict, Union, Tuple
-from utils import access_nested_map, get_json, requests
+from utils import access_nested_map, get_json, requests, memoize
 import unittest
 from parameterized import parameterized
 from unittest import mock
@@ -43,7 +43,7 @@ class TestGetJson(unittest.TestCase):
     @mock.patch("utils.requests")
     def test_get_json(self, test_url: str, test_payload: Dict[str, bool],
                       mock_requests: mock.Mock):
-        """Test Get JSON"""
+        """Test get_json"""
 
         mock_response = mock.MagicMock()
         mock_response.status_code = 200
@@ -52,3 +52,25 @@ class TestGetJson(unittest.TestCase):
         self.assertEqual(get_json(
             test_url), mock_response.json())
         mock_requests.get.assert_called_with(test_url)
+
+
+class TestMemoize(unittest.TestCase):
+    """test memoize"""
+
+    def test_memoize(self):
+
+        class TestClass:
+
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with mock.patch.object(TestClass, 'a_method',
+                               return_value=42) as mock_method:
+            test_obj = TestClass()
+            test_obj.a_property
+            test_obj.a_property
+        mock_method.assert_called_once()
