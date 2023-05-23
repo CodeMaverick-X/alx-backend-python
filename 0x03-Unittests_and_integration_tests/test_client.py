@@ -6,6 +6,7 @@ import unittest
 from unittest import mock
 from parameterized import parameterized
 from client import GithubOrgClient
+from typing import Dict
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -58,3 +59,14 @@ class TestGithubOrgClient(unittest.TestCase):
             data = mockq.public_repos()
             self.assertEqual(list(payload.values()), data)
             mock_get_json.assert_called_once()
+
+    @parameterized.expand([
+        ({"repo": {"license": {"key": "my_license"}},
+         "license_key": "my_license"}, True),
+        ({"repo": {"license": {"key": "other_license"}},
+         "license_key": "my_license"}, False)
+    ])
+    def test_has_license(self, input: Dict[str, Dict[str, str]],
+                         expected: bool):
+        """Test has license method"""
+        self.assertEqual(GithubOrgClient.has_license(**input), expected)
