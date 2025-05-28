@@ -21,8 +21,8 @@ def connect_db():
     try:
         connection = mysql.connector.connect(
             host='localhost',
-            user='root',  # Change as needed
-            password='',  # Add your MySQL password here
+            user='reinhard',  # Change as needed
+            password='plokijuhyg',  # Add your MySQL password here
             charset='utf8mb4',
             collation='utf8mb4_unicode_ci'
         )
