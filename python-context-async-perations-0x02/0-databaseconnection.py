@@ -14,3 +14,10 @@ class DatabaseConnection:
         print("Closing database connection")
         self._conn.close()
         return True
+    
+    
+    
+    
+with DatabaseConnection() as db:
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users")
