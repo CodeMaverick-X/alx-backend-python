@@ -2,7 +2,7 @@ import sqlite3
 
 
 class ExecuteQuery:
-    def init(self, age):
+    def __init__(self, age):
         self.age = age
         
     def __enter__(self):
@@ -17,3 +17,8 @@ class ExecuteQuery:
         if exc_type is not None:
             print(f"An error occurred: {exc_value}")
         return True        
+    
+    
+with ExecuteQuery(30) as rows:
+    for row in rows:
+        print(row)
