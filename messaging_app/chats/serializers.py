@@ -156,11 +156,11 @@ class ConversationSerializer(serializers.ModelSerializer):
     Basic serializer for Conversation model
     """
     participants = UserSerializer(many=True, read_only=True)
-    participants_ids = serializers.ListField(
-        child=serializers.UUIDField(),
-        write_only=True,
-        required=False
-    )
+    # participants_ids = serializers.ListField(
+    #     child=serializers.UUIDField(),
+    #     write_only=True,
+    #     required=False
+    # )
     participants_names = serializers.CharField(read_only=True)
     messages_count = serializers.SerializerMethodField()
     last_message = serializers.SerializerMethodField()
@@ -170,7 +170,7 @@ class ConversationSerializer(serializers.ModelSerializer):
         fields = [
             'conversation_id',
             'participants',
-            'participants_ids',
+            # 'participants_ids',
             'participants_names',
             'created_at',
             'messages_count',
